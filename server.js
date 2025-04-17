@@ -1,7 +1,10 @@
+require("dotenv").config();
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+
 const gameRoutes = require("./src/routes/gameRoutes"); 
 const playerRoutes = require("./src/routes/playerRoutes"); 
 const gameSocket = require("./src/socket/gameSocket");

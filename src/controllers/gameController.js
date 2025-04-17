@@ -1,5 +1,5 @@
 const Game = require("../models/Game");
-
+const Player = require("../models/Player");
 exports.startGame = (req, res) => {
   const { playerId } = req.body;
   Game.create(playerId, (err, gameId) => {
@@ -107,6 +107,11 @@ exports.updateRound = (req, res) => {
 console.log(board);
 
   Game.updateRound(roundId, board,next_player, winner, (err) => {
+    if (winner) {
+      Player.incrementScore(winner, (err) => {
+        if (err) console.error("Failed to update score:", err);
+      });
+    }
     if (err) return res.status(500).json({ message: "Failed to update round" });
     res.json({ message: "Round updated successfully" });
   });
