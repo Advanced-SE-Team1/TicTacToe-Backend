@@ -8,8 +8,9 @@ const cors = require("cors");
 const gameRoutes = require("./src/routes/gameRoutes"); 
 const playerRoutes = require("./src/routes/playerRoutes"); 
 const gameSocket = require("./src/socket/gameSocket");
+const swaggerJsDoc = require("swagger-jsdoc");
 
-const { swaggerUi, swaggerDocs } = require("./src/swagger");
+const { swaggerUi, swaggerDocs, swaggerOptions } = require("./src/swagger");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -22,7 +23,13 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
+const swaggerSpec = swaggerJsDoc(swaggerOptions);
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.get('/swagger.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 // API Routes
 app.use("/api/games", gameRoutes);
